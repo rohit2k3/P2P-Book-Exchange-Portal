@@ -3,6 +3,58 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  
+/* Primary colors */
+/* --primary-50: #f0f9ff;
+--primary-100: #e0f2fe;
+--primary-200: #bae6fd; */
+--primary-300: #7dd3fc;
+--primary-400: #38bdf8;
+--primary-500: #0ea5e9;
+--primary-600: #0284c7;
+--primary-700: #0369a1;
+--primary-800: #075985;
+--primary-900: #0c4a6e;
+--primary-950: #082f49;
+
+/* Secondary colors */
+--secondary-50: #fdf4ff;
+--secondary-100: #fae8ff;
+--secondary-200: #f5d0fe;
+--secondary-300: #f0abfc;
+--secondary-400: #e879f9;
+--secondary-500: #d946ef;
+--secondary-600: #c026d3;
+--secondary-700: #a21caf;
+--secondary-800: #86198f;
+--secondary-900: #701a75;
+--secondary-950: #4a044e;
+
+/* Accent colors */
+--accent-50: #fffbeb;
+--accent-100: #fef3c7;
+--accent-200: #fde68a;
+--accent-300: #fcd34d;
+--accent-400: #fbbf24;
+--accent-500: #f59e0b;
+--accent-600: #d97706;
+--accent-700: #b45309;
+--accent-800: #92400e;
+--accent-900: #78350f;
+--accent-950: #451a03;
+
+/* Dark colors */
+/* --dark-50: #f8fafc;
+--dark-100: #f1f5f9;
+--dark-200: #e2e8f0;
+--dark-300: #cbd5e1;
+--dark-400: #94a3b8; */
+--dark-500: #64748b;
+--dark-600: #475569;
+--dark-700: #334155;
+--dark-800: #1e293b;
+--dark-900: #0f172a;
+--dark-950: #020617;
 }
 
 @theme inline {
@@ -10,12 +62,69 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  
+  /* Theme colors from Tailwind config */
+/* Primary */
+--color-primary-50: var(--primary-50);
+--color-primary-100: var(--primary-100);
+--color-primary-200: var(--primary-200);
+--color-primary-300: var(--primary-300);
+--color-primary-400: var(--primary-400);
+--color-primary-500: var(--primary-500);
+--color-primary-600: var(--primary-600);
+--color-primary-700: var(--primary-700);
+--color-primary-800: var(--primary-800);
+--color-primary-900: var(--primary-900);
+--color-primary-950: var(--primary-950);
+
+/* Secondary */
+--color-secondary-50: var(--secondary-50);
+--color-secondary-100: var(--secondary-100);
+--color-secondary-200: var(--secondary-200);
+--color-secondary-300: var(--secondary-300);
+--color-secondary-400: var(--secondary-400);
+--color-secondary-500: var(--secondary-500);
+--color-secondary-600: var(--secondary-600);
+--color-secondary-700: var(--secondary-700);
+--color-secondary-800: var(--secondary-800);
+--color-secondary-900: var(--secondary-900);
+--color-secondary-950: var(--secondary-950);
+
+/* Accent */
+--color-accent-50: var(--accent-50);
+--color-accent-100: var(--accent-100);
+--color-accent-200: var(--accent-200);
+--color-accent-300: var(--accent-300);
+--color-accent-400: var(--accent-400);
+--color-accent-500: var(--accent-500);
+--color-accent-600: var(--accent-600);
+--color-accent-700: var(--accent-700);
+--color-accent-800: var(--accent-800);
+--color-accent-900: var(--accent-900);
+--color-accent-950: var(--accent-950);
+
+/* Dark */
+--color-dark-50: var(--dark-50);
+--color-dark-100: var(--dark-100);
+--color-dark-200: var(--dark-200);
+--color-dark-300: var(--dark-300);
+--color-dark-400: var(--dark-400);
+--color-dark-500: var(--dark-500);
+--color-dark-600: var(--dark-600);
+--color-dark-700: var(--dark-700);
+--color-dark-800: var(--dark-800);
+--color-dark-900: var(--dark-900);
+--color-dark-950: var(--dark-950);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    
+    /* You can adjust these colors for dark mode if needed */
+    /* --primary-500: #0ea5e9; */
+    /* --secondary-500: #a855f7; */
   }
 }
 
