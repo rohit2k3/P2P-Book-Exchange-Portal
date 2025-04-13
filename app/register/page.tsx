@@ -31,176 +31,114 @@ export default function Register() {
 
     try {
       await register(formData)
-      // Redirect is handled in the AuthContext
     } catch (err: any) {
       setError(err.response?.data?.message || "Registration failed. Please try again.")
     }
   }
 
   return (
-    <div className="min-h-screen bg-dark-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="text-center">
-          <div className="mx-auto h-16 w-16 rounded-full bg-primary-100 flex items-center justify-center">
-            <FaUserPlus className="text-primary-600 text-2xl" />
-          </div>
-          <h2 className="mt-6 text-center text-3xl font-bold text-dark-900">Create your account</h2>
-          <p className="mt-2 text-center text-sm text-dark-600">Join our community of book lovers</p>
+    <div className="min-h-screen bg-white dark:bg-gray-900 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
+        <div className="mx-auto h-16 w-16 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center">
+          <FaUserPlus className="text-primary-600 text-2xl" />
         </div>
+        <h2 className="mt-6 text-3xl font-bold text-gray-900 dark:text-white">
+          Create your account
+        </h2>
+        <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+          Join our community of book lovers
+        </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow-soft sm:rounded-xl sm:px-10">
+        <div className="bg-white dark:bg-gray-800 py-8 px-6 shadow-md rounded-lg">
           {error && (
-            <div className="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">{error}</div>
+            <div className="mb-4 bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-800 text-red-700 dark:text-red-200 px-4 py-3 rounded-md">
+              {error}
+            </div>
           )}
 
           <form className="space-y-6" onSubmit={handleSubmit}>
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-dark-700">
-                Full Name
-              </label>
-              <div className="mt-1">
+            {[
+              { label: "Full Name", id: "name", type: "text", placeholder: "Rohit Sharma" },
+              { label: "Email address", id: "email", type: "email", placeholder: "you@example.com" },
+              { label: "Password", id: "password", type: "password", placeholder: "••••••••" },
+              { label: "Phone Number", id: "phone", type: "tel", placeholder: "+91 9874563215" },
+            ].map(({ label, id, type, placeholder }) => (
+              <div key={id}>
+                <label htmlFor={id} className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                  {label}
+                </label>
                 <input
-                  id="name"
-                  name="name"
-                  type="text"
+                  id={id}
+                  name={id}
+                  type={type}
                   required
-                  value={formData.name}
+                  value={(formData as any)[id]}
                   onChange={handleChange}
-                  className="form-input"
-                  placeholder="John Doe"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                  placeholder={placeholder}
                 />
               </div>
-            </div>
+            ))}
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-dark-700">
-                Email address
-              </label>
-              <div className="mt-1">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="form-input"
-                  placeholder="you@example.com"
-                />
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">I want to</label>
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  { role: "seeker", icon: FaSearch, label: "Find Books" },
+                  { role: "owner", icon: FaBook, label: "Share Books" },
+                ].map(({ role, icon: Icon, label }) => {
+                  const isActive = formData.role === role
+                  return (
+                    <div
+                      key={role}
+                      onClick={() => setFormData((prev) => ({ ...prev, role: role as "seeker" | "owner" }))}
+                      className={`cursor-pointer border rounded-lg p-3 flex flex-col items-center ${
+                        isActive
+                          ? "border-primary-500 bg-primary-50 dark:bg-primary-900"
+                          : "border-gray-300 dark:border-gray-600 hover:border-primary-300"
+                      }`}
+                    >
+                      <Icon className={`text-xl ${isActive ? "text-primary-600" : "text-gray-500 dark:text-gray-300"}`} />
+                      <span
+                        className={`mt-1 text-sm ${
+                          isActive
+                            ? "font-medium text-primary-700 dark:text-primary-200"
+                            : "text-gray-700 dark:text-gray-200"
+                        }`}
+                      >
+                        {label}
+                      </span>
+                      <input
+                        type="radio"
+                        name="role"
+                        value={role}
+                        checked={formData.role === role}
+                        onChange={handleChange}
+                        className="sr-only"
+                      />
+                    </div>
+                  )
+                })}
               </div>
             </div>
 
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-dark-700">
-                Password
-              </label>
-              <div className="mt-1">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="new-password"
-                  required
-                  value={formData.password}
-                  onChange={handleChange}
-                  className="form-input"
-                  placeholder="••••••••"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-dark-700">
-                Phone Number
-              </label>
-              <div className="mt-1">
-                <input
-                  id="phone"
-                  name="phone"
-                  type="tel"
-                  required
-                  value={formData.phone}
-                  onChange={handleChange}
-                  className="form-input"
-                  placeholder="+1 (555) 123-4567"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="role" className="block text-sm font-medium text-dark-700">
-                I want to
-              </label>
-              <div className="mt-1 grid grid-cols-2 gap-3">
-                <div
-                  className={`cursor-pointer border rounded-lg p-3 flex flex-col items-center ${
-                    formData.role === "seeker"
-                      ? "border-primary-500 bg-primary-50"
-                      : "border-dark-300 hover:border-primary-300"
-                  }`}
-                  onClick={() => setFormData((prev) => ({ ...prev, role: "seeker" }))}
-                >
-                  <FaSearch
-                    className={`text-xl ${formData.role === "seeker" ? "text-primary-600" : "text-dark-500"}`}
-                  />
-                  <span
-                    className={`mt-1 ${formData.role === "seeker" ? "font-medium text-primary-700" : "text-dark-700"}`}
-                  >
-                    Find Books
-                  </span>
-                  <input
-                    type="radio"
-                    name="role"
-                    value="seeker"
-                    checked={formData.role === "seeker"}
-                    onChange={handleChange}
-                    className="sr-only"
-                  />
-                </div>
-                <div
-                  className={`cursor-pointer border rounded-lg p-3 flex flex-col items-center ${
-                    formData.role === "owner"
-                      ? "border-primary-500 bg-primary-50"
-                      : "border-dark-300 hover:border-primary-300"
-                  }`}
-                  onClick={() => setFormData((prev) => ({ ...prev, role: "owner" }))}
-                >
-                  <FaBook className={`text-xl ${formData.role === "owner" ? "text-primary-600" : "text-dark-500"}`} />
-                  <span
-                    className={`mt-1 ${formData.role === "owner" ? "font-medium text-primary-700" : "text-dark-700"}`}
-                  >
-                    Share Books
-                  </span>
-                  <input
-                    type="radio"
-                    name="role"
-                    value="owner"
-                    checked={formData.role === "owner"}
-                    onChange={handleChange}
-                    className="sr-only"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <button type="submit" disabled={isLoading} className="btn btn-primary w-full flex justify-center py-3">
-                {isLoading ? "Creating Account..." : "Create Account"}
-              </button>
-            </div>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full py-3 text-white bg-primary-600 hover:bg-primary-700 disabled:opacity-50 rounded-md shadow transition"
+            >
+              {isLoading ? "Creating Account..." : "Create Account"}
+            </button>
           </form>
 
-          <div className="mt-6">
-            <div className="text-sm text-center">
-              Already have an account?{" "}
-              <Link href="/login" className="font-medium text-primary-600 hover:text-primary-500">
-                Log in
-              </Link>
-            </div>
-          </div>
+          <p className="mt-6 text-sm text-center text-gray-600 dark:text-gray-300">
+            Already have an account?{" "}
+            <Link href="/login" className="font-medium text-primary-600 hover:text-primary-500">
+              Log in
+            </Link>
+          </p>
         </div>
       </div>
     </div>

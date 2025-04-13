@@ -15,7 +15,12 @@ export interface Book {
   contact: string
   status: "available" | "rented" | "exchanged"
   bookCover: string
-  ownerId: string | User
+  ownerId: {
+    _id: string
+    name: string
+    email: string
+    phone: string
+  }
   description?: string
   publishYear?: number
   createdAt: string

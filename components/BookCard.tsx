@@ -2,6 +2,8 @@
 import type { Book } from "@/types"
 import { useAuth } from "@/context/AuthContext"
 import { FaEdit, FaTrash, FaExchangeAlt } from "react-icons/fa"
+import Modal from "./Modal"
+import { useState } from "react"
 
 interface BookCardProps {
   book: Book
@@ -13,6 +15,7 @@ interface BookCardProps {
 const BookCard = ({ book, onStatusChange, onEdit, onDelete }: BookCardProps) => {
   const { user } = useAuth()
   const isOwner = user?._id === (typeof book.ownerId === "string" ? book.ownerId : book.ownerId._id)
+  const [contactButtonClicked, setContactButtonClicked] = useState(false)
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -31,7 +34,7 @@ const BookCard = ({ book, onStatusChange, onEdit, onDelete }: BookCardProps) => 
     <div className="rounded-xl overflow-hidden shadow-soft bg-white book-card-hover">
       <div className="h-48 overflow-hidden relative">
         <img
-          src={book.bookCover || "/placeholder.svg?height=192&width=300"}
+          src={book.bookCover}
           alt={`Cover of ${book.title}`}
           className="w-full h-full object-cover"
         />
@@ -58,7 +61,7 @@ const BookCard = ({ book, onStatusChange, onEdit, onDelete }: BookCardProps) => 
                   id={`status-${book._id}`}
                   value={book.status}
                   onChange={(e) => onStatusChange(book._id, e.target.value as "available" | "rented" | "exchanged")}
-                  className="text-sm border rounded-md p-1 flex-grow bg-dark-50 focus:ring-primary-500 focus:border-primary-500"
+                  className="text-sm border rounded-md p-1 flex-grow dark:bg-dark-800 bg-dark-50 focus:ring-primary-500 focus:border-primary-500"
                 >
                   <option value="available">Available</option>
                   <option value="rented">Rented</option>
@@ -90,9 +93,10 @@ const BookCard = ({ book, onStatusChange, onEdit, onDelete }: BookCardProps) => 
 
         {!isOwner && (
           <div className="mt-4 border-t border-dark-200 pt-4">
-            <button className="w-full py-2 bg-primary-600 text-white rounded-md text-sm hover:bg-primary-700 transition-colors flex items-center justify-center">
+            <button onClick={() => setContactButtonClicked(!contactButtonClicked)} className="w-full py-2 bg-primary-600 text-white rounded-md text-sm hover:bg-primary-700 transition-colors flex items-center justify-center">
               <FaExchangeAlt className="mr-2" /> Contact Owner
             </button>
+            <Modal isOpen={contactButtonClicked} setIsOpen={setContactButtonClicked}  name={book.ownerId.name} email={book.ownerId.email} phone={book.ownerId.phone} key={book._id} />
           </div>
         )}
       </div>

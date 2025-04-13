@@ -172,15 +172,15 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="page-container">
+    <div className="flex flex-col p-6 min-h-screen">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-dark-900">Your Book Listings</h1>
-          <p className="text-dark-600 mt-1">Manage your books and track their status</p>
+          <h1 className="text-3xl font-bold text-dark-200">Your Book Listings</h1>
+          <p className="text-dark-400 mt-1">Manage your books and track their status</p>
         </div>
 
         {!isAddingBook && !editingBook && (
-          <button onClick={() => setIsAddingBook(true)} className="btn btn-primary mt-4 md:mt-0 flex items-center">
+          <button onClick={() => setIsAddingBook(true)} className="btn bg-dark-800 dark:bg-dark-100 text-dark-50 dark:text-dark-800 rounded-lg mt-4 md:mt-0 flex items-center p-2">
             <FaPlus className="mr-2" /> Add New Book
           </button>
         )}
@@ -267,7 +267,7 @@ export default function Dashboard() {
                 contact: editingBook.contact,
                 description: editingBook.description,
                 publishYear: editingBook.publishYear,
-                bookCover: editingBook.bookCover,
+                // bookCover: editingBook.bookCover,
               }}
               onSubmit={handleUpdateBook}
               buttonText="Update Book"

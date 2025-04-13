@@ -23,7 +23,7 @@ const BookForm = ({ onSubmit, initialData, buttonText = "Add Book" }: BookFormPr
     publishYear: initialData?.publishYear || undefined,
   })
   const [coverImage, setCoverImage] = useState<File | null>(null)
-  const [previewUrl, setPreviewUrl] = useState<string>(initialData?.bookCover || "")
+  const [previewUrl, setPreviewUrl] = useState<string>(typeof initialData?.bookCover === "string" ? initialData.bookCover : "")
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -101,7 +101,7 @@ const BookForm = ({ onSubmit, initialData, buttonText = "Add Book" }: BookFormPr
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-soft p-6">
+    <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-900 rounded-lg shadow-soft p-8">
       {error && (
         <div className="mb-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded">
           <p>{error}</p>
@@ -111,7 +111,7 @@ const BookForm = ({ onSubmit, initialData, buttonText = "Add Book" }: BookFormPr
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-4">
           <div>
-            <label htmlFor="title" className="block text-sm font-medium text-dark-700 mb-1 flex items-center">
+            <label htmlFor="title" className="text-sm font-medium dark:text-dark-100 text-dark-700 mb-1 flex items-center">
               <FaBook className="mr-2 text-primary-600" /> Title
             </label>
             <input
@@ -127,7 +127,7 @@ const BookForm = ({ onSubmit, initialData, buttonText = "Add Book" }: BookFormPr
           </div>
 
           <div>
-            <label htmlFor="author" className="block text-sm font-medium text-dark-700 mb-1 flex items-center">
+            <label htmlFor="author" className="  text-sm font-medium dark:text-dark-100 text-dark-700 mb-1 flex items-center">
               <FaUser className="mr-2 text-primary-600" /> Author
             </label>
             <input
@@ -143,7 +143,7 @@ const BookForm = ({ onSubmit, initialData, buttonText = "Add Book" }: BookFormPr
           </div>
 
           <div>
-            <label htmlFor="genre" className="block text-sm font-medium text-dark-700 mb-1 flex items-center">
+            <label htmlFor="genre" className="text-sm font-medium text-dark-700 dark:text-dark-100 mb-1 flex items-center">
               <FaTags className="mr-2 text-primary-600" /> Genre (optional)
             </label>
             <input
@@ -158,7 +158,7 @@ const BookForm = ({ onSubmit, initialData, buttonText = "Add Book" }: BookFormPr
           </div>
 
           <div>
-            <label htmlFor="publishYear" className="block text-sm font-medium text-dark-700 mb-1">
+            <label htmlFor="publishYear" className="block text-sm font-medium text-dark-700 dark:text-dark-100 mb-1">
               Publish Year (optional)
             </label>
             <input
@@ -177,7 +177,7 @@ const BookForm = ({ onSubmit, initialData, buttonText = "Add Book" }: BookFormPr
 
         <div className="space-y-4">
           <div>
-            <label htmlFor="location" className="block text-sm font-medium text-dark-700 mb-1 flex items-center">
+            <label htmlFor="location" className=" text-sm font-medium text-dark-700 dark:text-dark-100 mb-1 flex items-center">
               <FaMapMarkerAlt className="mr-2 text-primary-600" /> Location
             </label>
             <input
@@ -193,7 +193,7 @@ const BookForm = ({ onSubmit, initialData, buttonText = "Add Book" }: BookFormPr
           </div>
 
           <div>
-            <label htmlFor="contact" className="block text-sm font-medium text-dark-700 mb-1 flex items-center">
+            <label htmlFor="contact" className=" text-sm font-medium text-dark-700 dark:text-dark-100 mb-1 flex items-center">
               <FaPhone className="mr-2 text-primary-600" /> Contact
             </label>
             <input
@@ -209,7 +209,7 @@ const BookForm = ({ onSubmit, initialData, buttonText = "Add Book" }: BookFormPr
           </div>
 
           <div>
-            <label htmlFor="description" className="block text-sm font-medium text-dark-700 mb-1">
+            <label htmlFor="description" className="block text-sm font-medium text-dark-700 dark:text-dark-100 mb-1">
               Description (optional)
             </label>
             <textarea
@@ -225,7 +225,7 @@ const BookForm = ({ onSubmit, initialData, buttonText = "Add Book" }: BookFormPr
         </div>
 
         <div className="md:col-span-2">
-          <label htmlFor="bookCover" className="block text-sm font-medium text-dark-700 mb-1">
+          <label htmlFor="bookCover" className="block text-sm font-medium text-dark-700 dark:text-dark-100 mb-1">
             Book Cover
           </label>
           <div className="flex flex-col md:flex-row md:items-center gap-4">
@@ -242,14 +242,14 @@ const BookForm = ({ onSubmit, initialData, buttonText = "Add Book" }: BookFormPr
                 />
                 <label htmlFor="bookCover" className="cursor-pointer flex flex-col items-center">
                   <FaUpload className="text-primary-600 text-2xl mb-2" />
-                  <span className="text-dark-600 font-medium">Click to upload book cover</span>
-                  <span className="text-dark-400 text-sm mt-1">JPG, PNG, GIF or WEBP (max 5MB)</span>
+                  <span className="text-dark-600 font-medium dark:text-dark-100">Click to upload book cover</span>
+                  <span className="text-dark-400 text-sm mt-1 dark:text-dark-100">JPG, PNG, GIF or WEBP (max 5MB)</span>
                 </label>
               </div>
             </div>
             {previewUrl && (
               <div className="w-full md:w-1/3">
-                <div className="aspect-[2/3] relative rounded-lg overflow-hidden border border-dark-300">
+                <div className="aspect-[2/3] h-48 relative rounded-lg overflow-hidden border border-dark-300">
                   <img
                     src={previewUrl || "/placeholder.svg"}
                     alt="Book cover preview"
@@ -263,7 +263,7 @@ const BookForm = ({ onSubmit, initialData, buttonText = "Add Book" }: BookFormPr
       </div>
 
       <div className="mt-6">
-        <button type="submit" disabled={isLoading} className="btn btn-primary w-full md:w-auto">
+        <button type="submit" disabled={isLoading} className="w-full py-3 text-white bg-primary-600 hover:bg-primary-700 disabled:opacity-50 rounded-md shadow transition">
           {isLoading ? "Submitting..." : buttonText}
         </button>
       </div>

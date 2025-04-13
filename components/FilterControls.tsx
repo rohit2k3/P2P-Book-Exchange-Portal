@@ -58,7 +58,7 @@ const FilterControls = ({ onFilterChange }: FilterControlsProps) => {
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-soft mb-8 overflow-hidden">
+    <div className="bg-white rounded-xl shadow-soft m-4 overflow-hidden">
       <div 
         className="p-4 flex justify-between items-center cursor-pointer"
         onClick={toggleExpand}

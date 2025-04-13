@@ -44,11 +44,11 @@
 --accent-950: #451a03;
 
 /* Dark colors */
-/* --dark-50: #f8fafc;
+--dark-50: #f8fafc;
 --dark-100: #f1f5f9;
 --dark-200: #e2e8f0;
 --dark-300: #cbd5e1;
---dark-400: #94a3b8; */
+--dark-400: #94a3b8;
 --dark-500: #64748b;
 --dark-600: #475569;
 --dark-700: #334155;
@@ -117,14 +117,14 @@
 --color-dark-950: var(--dark-950);
 }
 
+/* Dark mode overrides */
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
-    --foreground: #ededed;
-    
-    /* You can adjust these colors for dark mode if needed */
-    /* --primary-500: #0ea5e9; */
-    /* --secondary-500: #a855f7; */
+    --foreground: #f5f5f5;
+    --input-bg: #1f2937;
+    --input-border: #374151;
+    --input-text: #e5e7eb;
   }
 }
 
@@ -132,4 +132,19 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.form-input {
+  background-color: var(--input-bg);
+  color: var(--input-text);
+  border: 1px solid var(--input-border);
+  border-radius: 0.375rem; /* rounded-md */
+  padding: 0.5rem 0.75rem;
+  width: 100%;
+  outline: none;
+  transition: border 0.2s ease;
+}
+
+.form-input:focus {
+  border-color: var(--primary-500);
 }
