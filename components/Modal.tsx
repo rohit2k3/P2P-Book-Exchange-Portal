@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { FaEnvelope, FaPhoneAlt } from "react-icons/fa";
 
 interface ModalProps {

@@ -9,7 +9,7 @@ import type { Book, FilterOptions } from "@/types"
 import { FaSearch, FaBookOpen } from "react-icons/fa"
 
 export default function Browse() {
-  const [books, setBooks] = useState<Book[]>([])
+  // const [books, setBooks] = useState<Book[]>([])
   const [filteredBooks, setFilteredBooks] = useState<Book[]>([])
   const [filters, setFilters] = useState<FilterOptions>({})
   const [loading, setLoading] = useState(true)
@@ -22,7 +22,7 @@ export default function Browse() {
       try {
         setLoading(true)
         const { data } = await axios.get(`${API_URL}/books`)
-        setBooks(data)
+        // setBooks(data)
         setFilteredBooks(data)
       } catch (error) {
         console.error("Error fetching books:", error)
