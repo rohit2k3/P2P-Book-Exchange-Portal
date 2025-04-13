@@ -87,9 +87,18 @@ The backend is deployed on **[Render](https://render.com)**.
 
 ## Getting Started with setup at local
 
-First, run the development server:
+### 1. Clone the repository
 
 ```bash
+git clone https://github.com/rohit2k3/P2P-Book-Exchange-Portal.git
+cd P2P-Book-Exchange-Portal
+```
+### 2. Clone the repositoryFirst, run the development server:
+
+```bash
+
+npm install
+
 npm run dev
 # or
 yarn dev
