@@ -9,6 +9,16 @@ interface FilterControlsProps {
   onFilterChange: (filters: FilterOptions) => void
 }
 
+interface Book {
+  _id: string; // Assuming an ID field exists
+  title: string; // Assuming a title field exists
+  author: string; // Assuming an author field exists
+  genre: string | null | undefined;
+  location: string;
+  status: 'available' | 'rented' | 'exchanged'; // Assuming status field exists
+  // Add other relevant fields based on your actual API response
+}
+
 const FilterControls = ({ onFilterChange }: FilterControlsProps) => {
   const [filters, setFilters] = useState<FilterOptions>({
     genre: "",
@@ -27,12 +37,12 @@ const FilterControls = ({ onFilterChange }: FilterControlsProps) => {
         const { data } = await axios.get(`${API_URL}/books`)
 
         // Extract unique genres and locations
-        const uniqueGenres = Array.from(new Set(data.map((book: any) => book.genre).filter(Boolean)))
-        const uniqueLocations = Array.from(new Set(data.map((book: any) => book.location)))
+        const uniqueGenres = Array.from(new Set(data.map((book: Book) => book.genre).filter(Boolean)))
+        const uniqueLocations = Array.from(new Set(data.map((book: Book) => book.location)))
 
         setGenres(uniqueGenres as string[])
         setLocations(uniqueLocations as string[])
-      } catch (error) {
+      } catch (error:unknown) {
         console.error("Error fetching filter options:", error)
       }
     }

@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState } from "react"
-import Link from "next/link"
-import { useAuth } from "@/context/AuthContext"
-import type { RegisterFormData } from "@/types"
-import { FaBook, FaSearch, FaUserPlus } from "react-icons/fa"
+import type React from "react";
+import { useState } from "react";
+import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
+import type { RegisterFormData } from "@/types";
+import { FaBook, FaSearch, FaUserPlus } from "react-icons/fa";
 
 export default function Register() {
   const [formData, setFormData] = useState<RegisterFormData>({
@@ -14,25 +14,37 @@ export default function Register() {
     password: "",
     phone: "",
     role: "seeker",
-  })
-  const [error, setError] = useState<string>("")
-  const { register, isLoading } = useAuth()
+  });
+  const [error, setError] = useState<string>("");
+  const { register, isLoading } = useAuth();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError("")
+    e.preventDefault();
+    setError("");
 
     try {
-      await register(formData)
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Registration failed. Please try again.")
+      await register(formData);
+    } catch (err: unknown) {
+      if (err && typeof err === "object" && "response" in err) {
+        const axiosError = err as {
+          response?: { data?: { message?: string } };
+        };
+        setError(
+          axiosError.response?.data?.message ||
+            "Registration failed. Please try again."
+        );
+      } else {
+        setError("Registration failed. Please try again.");
+      }
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -58,13 +70,36 @@ export default function Register() {
 
           <form className="space-y-6" onSubmit={handleSubmit}>
             {[
-              { label: "Full Name", id: "name", type: "text", placeholder: "Rohit Sharma" },
-              { label: "Email address", id: "email", type: "email", placeholder: "you@example.com" },
-              { label: "Password", id: "password", type: "password", placeholder: "••••••••" },
-              { label: "Phone Number", id: "phone", type: "tel", placeholder: "+91 9874563215" },
+              {
+                label: "Full Name",
+                id: "name",
+                type: "text",
+                placeholder: "Rohit Sharma",
+              },
+              {
+                label: "Email address",
+                id: "email",
+                type: "email",
+                placeholder: "you@example.com",
+              },
+              {
+                label: "Password",
+                id: "password",
+                type: "password",
+                placeholder: "••••••••",
+              },
+              {
+                label: "Phone Number",
+                id: "phone",
+                type: "tel",
+                placeholder: "+91 9874563215",
+              },
             ].map(({ label, id, type, placeholder }) => (
               <div key={id}>
-                <label htmlFor={id} className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                <label
+                  htmlFor={id}
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                >
                   {label}
                 </label>
                 <input
@@ -72,7 +107,7 @@ export default function Register() {
                   name={id}
                   type={type}
                   required
-                  value={(formData as any)[id]}
+                  value={formData[id as keyof Omit<RegisterFormData, 'role'>]}
                   onChange={handleChange}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                   placeholder={placeholder}
@@ -81,24 +116,37 @@ export default function Register() {
             ))}
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">I want to</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                I want to
+              </label>
               <div className="grid grid-cols-2 gap-3">
                 {[
                   { role: "seeker", icon: FaSearch, label: "Find Books" },
                   { role: "owner", icon: FaBook, label: "Share Books" },
                 ].map(({ role, icon: Icon, label }) => {
-                  const isActive = formData.role === role
+                  const isActive = formData.role === role;
                   return (
                     <div
                       key={role}
-                      onClick={() => setFormData((prev) => ({ ...prev, role: role as "seeker" | "owner" }))}
+                      onClick={() =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          role: role as "seeker" | "owner",
+                        }))
+                      }
                       className={`cursor-pointer border rounded-lg p-3 flex flex-col items-center ${
                         isActive
                           ? "border-primary-500 bg-primary-50 dark:bg-primary-900"
                           : "border-gray-300 dark:border-gray-600 hover:border-primary-300"
                       }`}
                     >
-                      <Icon className={`text-xl ${isActive ? "text-primary-600" : "text-gray-500 dark:text-gray-300"}`} />
+                      <Icon
+                        className={`text-xl ${
+                          isActive
+                            ? "text-primary-600"
+                            : "text-gray-500 dark:text-gray-300"
+                        }`}
+                      />
                       <span
                         className={`mt-1 text-sm ${
                           isActive
@@ -117,7 +165,7 @@ export default function Register() {
                         className="sr-only"
                       />
                     </div>
-                  )
+                  );
                 })}
               </div>
             </div>
@@ -133,12 +181,15 @@ export default function Register() {
 
           <p className="mt-6 text-sm text-center text-gray-600 dark:text-gray-300">
             Already have an account?{" "}
-            <Link href="/login" className="font-medium text-primary-600 hover:text-primary-500">
+            <Link
+              href="/login"
+              className="font-medium text-primary-600 hover:text-primary-500"
+            >
               Log in
             </Link>
           </p>
         </div>
       </div>
     </div>
-  )
+  );
 }

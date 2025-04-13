@@ -25,9 +25,14 @@ export default function Login() {
     setError("")
     try {
       await login(formData.email, formData.password)
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Login failed. Please check your credentials.")
-    }
+    } catch (err: unknown) {
+      if (err && typeof err === "object" && "response" in err) {
+        const axiosError = err as { response?: { data?: { message?: string } } };
+        setError(axiosError.response?.data?.message || "Login failed. Please check your credentials.");
+      } else {
+        setError("Login failed. Please check your credentials.");
+      }
+    }    
   }
 
   return (

@@ -1,18 +1,29 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { FaUpload, FaBook, FaUser, FaMapMarkerAlt, FaPhone, FaTags } from "react-icons/fa"
-import type { BookFormData } from "@/types"
+import { useState } from "react";
+import {
+  FaUpload,
+  FaBook,
+  FaUser,
+  FaMapMarkerAlt,
+  FaPhone,
+  FaTags,
+} from "react-icons/fa";
+import type { BookFormData } from "@/types";
 
 interface BookFormProps {
-  onSubmit: (formData: FormData) => Promise<void>
-  initialData?: BookFormData
-  buttonText?: string
+  onSubmit: (formData: FormData) => Promise<void>;
+  initialData?: BookFormData;
+  buttonText?: string;
 }
 
-const BookForm = ({ onSubmit, initialData, buttonText = "Add Book" }: BookFormProps) => {
+const BookForm = ({
+  onSubmit,
+  initialData,
+  buttonText = "Add Book",
+}: BookFormProps) => {
   const [formData, setFormData] = useState<BookFormData>({
     title: initialData?.title || "",
     author: initialData?.author || "",
@@ -21,62 +32,76 @@ const BookForm = ({ onSubmit, initialData, buttonText = "Add Book" }: BookFormPr
     contact: initialData?.contact || "",
     description: initialData?.description || "",
     publishYear: initialData?.publishYear || undefined,
-  })
-  const [coverImage, setCoverImage] = useState<File | null>(null)
-  const [previewUrl, setPreviewUrl] = useState<string>(typeof initialData?.bookCover === "string" ? initialData.bookCover : "")
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  });
+  const [coverImage, setCoverImage] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string>(
+    typeof initialData?.bookCover === "string" ? initialData.bookCover : ""
+  );
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0]
+      const file = e.target.files[0];
 
       // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
-        setError("Image size should be less than 5MB")
-        return
+        setError("Image size should be less than 5MB");
+        return;
       }
 
       // Validate file type
-      const validTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"]
+      const validTypes = [
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "image/gif",
+        "image/webp",
+      ];
       if (!validTypes.includes(file.type)) {
-        setError("Please upload a valid image (JPEG, JPG, PNG, GIF, WEBP)")
-        return
+        setError("Please upload a valid image (JPEG, JPG, PNG, GIF, WEBP)");
+        return;
       }
 
-      setCoverImage(file)
-      setPreviewUrl(URL.createObjectURL(file))
-      setError(null)
+      setCoverImage(file);
+      setPreviewUrl(URL.createObjectURL(file));
+      setError(null);
     }
-  }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setError(null)
+    e.preventDefault();
+    setIsLoading(true);
+    setError(null);
 
     try {
       // Create FormData object for file upload
-      const submitData = new FormData()
-      submitData.append("title", formData.title)
-      submitData.append("author", formData.author)
-      if (formData.genre) submitData.append("genre", formData.genre)
-      submitData.append("location", formData.location)
-      submitData.append("contact", formData.contact)
-      if (formData.description) submitData.append("description", formData.description)
-      if (formData.publishYear) submitData.append("publishYear", formData.publishYear.toString())
+      const submitData = new FormData();
+      submitData.append("title", formData.title);
+      submitData.append("author", formData.author);
+      if (formData.genre) submitData.append("genre", formData.genre);
+      submitData.append("location", formData.location);
+      submitData.append("contact", formData.contact);
+      if (formData.description)
+        submitData.append("description", formData.description);
+      if (formData.publishYear)
+        submitData.append("publishYear", formData.publishYear.toString());
 
       // Only append file if a new one is selected
       if (coverImage) {
-        submitData.append("bookCover", coverImage)
+        submitData.append("bookCover", coverImage);
       }
 
-      await onSubmit(submitData)
+      await onSubmit(submitData);
 
       // Reset form if it's a new book (no initialData)
       if (!initialData) {
@@ -88,20 +113,34 @@ const BookForm = ({ onSubmit, initialData, buttonText = "Add Book" }: BookFormPr
           contact: "",
           description: "",
           publishYear: undefined,
-        })
-        setCoverImage(null)
-        setPreviewUrl("")
+        });
+        setCoverImage(null);
+        setPreviewUrl("");
       }
-    } catch (error: any) {
-      console.error("Form submission error:", error)
-      setError(error.response?.data?.message || "An error occurred while submitting the form")
+    } catch (err: unknown) {
+      console.log("Error submitting form:", err);
+
+      if (err && typeof err === "object" && "response" in err) {
+        const axiosError = err as {
+          response?: { data?: { message?: string } };
+        };
+        setError(
+          axiosError.response?.data?.message ||
+            "An error occurred while submitting the form"
+        );
+      } else {
+        setError("An error occurred while submitting the form.");
+      }
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-900 rounded-lg shadow-soft p-8">
+    <form
+      onSubmit={handleSubmit}
+      className="bg-white dark:bg-gray-900 rounded-lg shadow-soft p-8"
+    >
       {error && (
         <div className="mb-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded">
           <p>{error}</p>
@@ -111,7 +150,10 @@ const BookForm = ({ onSubmit, initialData, buttonText = "Add Book" }: BookFormPr
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-4">
           <div>
-            <label htmlFor="title" className="text-sm font-medium dark:text-dark-100 text-dark-700 mb-1 flex items-center">
+            <label
+              htmlFor="title"
+              className="text-sm font-medium dark:text-dark-100 text-dark-700 mb-1 flex items-center"
+            >
               <FaBook className="mr-2 text-primary-600" /> Title
             </label>
             <input
@@ -127,7 +169,10 @@ const BookForm = ({ onSubmit, initialData, buttonText = "Add Book" }: BookFormPr
           </div>
 
           <div>
-            <label htmlFor="author" className="  text-sm font-medium dark:text-dark-100 text-dark-700 mb-1 flex items-center">
+            <label
+              htmlFor="author"
+              className="  text-sm font-medium dark:text-dark-100 text-dark-700 mb-1 flex items-center"
+            >
               <FaUser className="mr-2 text-primary-600" /> Author
             </label>
             <input
@@ -143,7 +188,10 @@ const BookForm = ({ onSubmit, initialData, buttonText = "Add Book" }: BookFormPr
           </div>
 
           <div>
-            <label htmlFor="genre" className="text-sm font-medium text-dark-700 dark:text-dark-100 mb-1 flex items-center">
+            <label
+              htmlFor="genre"
+              className="text-sm font-medium text-dark-700 dark:text-dark-100 mb-1 flex items-center"
+            >
               <FaTags className="mr-2 text-primary-600" /> Genre (optional)
             </label>
             <input
@@ -158,7 +206,10 @@ const BookForm = ({ onSubmit, initialData, buttonText = "Add Book" }: BookFormPr
           </div>
 
           <div>
-            <label htmlFor="publishYear" className="block text-sm font-medium text-dark-700 dark:text-dark-100 mb-1">
+            <label
+              htmlFor="publishYear"
+              className="block text-sm font-medium text-dark-700 dark:text-dark-100 mb-1"
+            >
               Publish Year (optional)
             </label>
             <input
@@ -177,7 +228,10 @@ const BookForm = ({ onSubmit, initialData, buttonText = "Add Book" }: BookFormPr
 
         <div className="space-y-4">
           <div>
-            <label htmlFor="location" className=" text-sm font-medium text-dark-700 dark:text-dark-100 mb-1 flex items-center">
+            <label
+              htmlFor="location"
+              className=" text-sm font-medium text-dark-700 dark:text-dark-100 mb-1 flex items-center"
+            >
               <FaMapMarkerAlt className="mr-2 text-primary-600" /> Location
             </label>
             <input
@@ -193,7 +247,10 @@ const BookForm = ({ onSubmit, initialData, buttonText = "Add Book" }: BookFormPr
           </div>
 
           <div>
-            <label htmlFor="contact" className=" text-sm font-medium text-dark-700 dark:text-dark-100 mb-1 flex items-center">
+            <label
+              htmlFor="contact"
+              className=" text-sm font-medium text-dark-700 dark:text-dark-100 mb-1 flex items-center"
+            >
               <FaPhone className="mr-2 text-primary-600" /> Contact
             </label>
             <input
@@ -209,7 +266,10 @@ const BookForm = ({ onSubmit, initialData, buttonText = "Add Book" }: BookFormPr
           </div>
 
           <div>
-            <label htmlFor="description" className="block text-sm font-medium text-dark-700 dark:text-dark-100 mb-1">
+            <label
+              htmlFor="description"
+              className="block text-sm font-medium text-dark-700 dark:text-dark-100 mb-1"
+            >
               Description (optional)
             </label>
             <textarea
@@ -225,7 +285,10 @@ const BookForm = ({ onSubmit, initialData, buttonText = "Add Book" }: BookFormPr
         </div>
 
         <div className="md:col-span-2">
-          <label htmlFor="bookCover" className="block text-sm font-medium text-dark-700 dark:text-dark-100 mb-1">
+          <label
+            htmlFor="bookCover"
+            className="block text-sm font-medium text-dark-700 dark:text-dark-100 mb-1"
+          >
             Book Cover
           </label>
           <div className="flex flex-col md:flex-row md:items-center gap-4">
@@ -240,10 +303,17 @@ const BookForm = ({ onSubmit, initialData, buttonText = "Add Book" }: BookFormPr
                   className="hidden"
                   required={!initialData}
                 />
-                <label htmlFor="bookCover" className="cursor-pointer flex flex-col items-center">
+                <label
+                  htmlFor="bookCover"
+                  className="cursor-pointer flex flex-col items-center"
+                >
                   <FaUpload className="text-primary-600 text-2xl mb-2" />
-                  <span className="text-dark-600 font-medium dark:text-dark-100">Click to upload book cover</span>
-                  <span className="text-dark-400 text-sm mt-1 dark:text-dark-100">JPG, PNG, GIF or WEBP (max 5MB)</span>
+                  <span className="text-dark-600 font-medium dark:text-dark-100">
+                    Click to upload book cover
+                  </span>
+                  <span className="text-dark-400 text-sm mt-1 dark:text-dark-100">
+                    JPG, PNG, GIF or WEBP (max 5MB)
+                  </span>
                 </label>
               </div>
             </div>
@@ -263,12 +333,16 @@ const BookForm = ({ onSubmit, initialData, buttonText = "Add Book" }: BookFormPr
       </div>
 
       <div className="mt-6">
-        <button type="submit" disabled={isLoading} className="w-full py-3 text-white bg-primary-600 hover:bg-primary-700 disabled:opacity-50 rounded-md shadow transition">
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="w-full py-3 text-white bg-primary-600 hover:bg-primary-700 disabled:opacity-50 rounded-md shadow transition"
+        >
           {isLoading ? "Submitting..." : buttonText}
         </button>
       </div>
     </form>
-  )
-}
+  );
+};
 
-export default BookForm
+export default BookForm;
