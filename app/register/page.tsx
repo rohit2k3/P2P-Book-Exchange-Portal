@@ -2,7 +2,6 @@
 
 import type React from "react"
 import { useState } from "react"
-import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { useAuth } from "@/context/AuthContext"
 import type { RegisterFormData } from "@/types"
@@ -18,7 +17,6 @@ export default function Register() {
   })
   const [error, setError] = useState<string>("")
   const { register, isLoading } = useAuth()
-  const router = useRouter()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target

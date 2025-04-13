@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react"
 import axios from "axios"
-import { useRouter } from "next/navigation"
 import FilterControls from "@/components/FilterControls"
 import BookCard from "@/components/BookCard"
 import type { Book, FilterOptions } from "@/types"
@@ -14,7 +13,6 @@ export default function Browse() {
   const [filters, setFilters] = useState<FilterOptions>({})
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
-  const router = useRouter()
   const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api"
 
   useEffect(() => {

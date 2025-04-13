@@ -1,7 +1,7 @@
 "use client"
 import Link from "next/link"
 import { useAuth } from "@/context/AuthContext"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import {
   FaBook,
   FaSignInAlt,
@@ -11,14 +11,11 @@ import {
   FaSearch,
   FaBars,
   FaTimes,
-  FaMoon,
-  FaSun,
 } from "react-icons/fa"
 
 const Navbar = () => {
   const { user, logout } = useAuth()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isDark, setIsDark] = useState(false)
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
 
