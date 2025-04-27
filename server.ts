@@ -31,6 +31,10 @@ app.get("/health", (req, res) => {
   res.status(200).json({ status: "ok", message: "Server is running" })
 })
 
+app.get("/", (req, res) => {
+  res.status(200).json({ status: "ok", message: "Server is running" })
+})
+
 // MongoDB Connection
 mongoose
   .connect(process.env.MONGODB_URI!)
